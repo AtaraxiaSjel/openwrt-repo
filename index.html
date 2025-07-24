@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AtaraxiaSjel's OpenWrt Package Repository</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        h1, h2, h3, h4 {
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        h1, h2 {
+             border-bottom-width: 2px;
+        }
+        code {
+            background-color: #eee;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+        }
+        pre {
+            background-color: #eee;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        a {
+            color: #0366d6;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 0.9em;
+            color: #666;
+        }
+        hr {
+            border: none;
+            border-top: 2px solid #eee;
+            margin: 40px 0;
+        }
+        ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        li {
+            background-color: #f6f8fa;
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>OpenWrt Package Repository</h1>
+        <p>This repository contains a collection of OpenWrt packages, automatically compiled from various third-party sources. It serves as a personal feed for centralized package management and continuous updates.</p>
+
+        <h2>Usage</h2>
+        <p>The installation method depends on your OpenWrt version. Follow the instructions that match your system.</p>
+
+        <h3>For Stable Releases (e.g., openwrt-24.10) - Using <code>opkg</code></h3>
+
+        <h4>1. Install the public signing key</h4>
+        <p>Connect to your device via SSH and run the following command to download the key to the trusted location:</p>
+        <pre><code>wget -O /etc/opkg/keys/ataraxiasjel.key https://openwrt.ataraxiadev.com/public.key</code></pre>
+
+        <h4>2. Add the package feed</h4>
+        <p>Add the following line to <code>/etc/opkg/customfeeds.conf</code>. If the file does not exist, create it.</p>
+        <pre><code>src/gz custom_repo_name https://openwrt.ataraxiadev.com/&lt;version&gt;/&lt;architecture&gt;</code></pre>
+        <p><strong>Example for <code>openwrt-24.10</code> on <code>aarch64_generic</code>:</strong></p>
+        <pre><code>src/gz ataraxiasjel_repo https://openwrt.ataraxiadev.com/openwrt-24.10/aarch64_generic</code></pre>
+
+        <h4>3. Update the package list</h4>
+        <pre><code>opkg update</code></pre>
+
+        <h4>4. Install a package</h4>
+        <p>You can now securely install packages from this repository:</p>
+        <pre><code>opkg install &lt;package_name&gt;</code></pre>
+
+        <h3>For SNAPSHOT Releases - Using <code>apk</code></h3>
+
+        <h4>1. Install the public signing key</h4>
+        <p>Connect to your device via SSH. The key must be placed in <code>/etc/apk/keys/</code>.</p>
+        <pre><code>wget -O /etc/apk/keys/ataraxiasjel-key.pem https://openwrt.ataraxiadev.com/public-key.pem</code></pre>
+
+        <h4>2. Add the package repository</h4>
+        <p>Add the repository URL to a new line in <code>/etc/apk/repositories</code>.</p>
+        <pre><code>https://openwrt.ataraxiadev.com/snapshot/&lt;architecture&gt;/packages.adb</code></pre>
+        <p><strong>Example for <code>SNAPSHOT</code> on <code>aarch64_generic</code>:</strong></p>
+        <pre><code>https://openwrt.ataraxiadev.com/snapshot/aarch64_generic/packages.adb</code></pre>
+
+        <h4>3. Update the package list</h4>
+        <pre><code>apk update</code></pre>
+
+        <h4>4. Install a package</h4>
+        <p>You can now securely install packages from this repository:</p>
+        <pre><code>apk add &lt;package_name&gt;</code></pre>
+
+        <h2>Repository Contents</h2>
+        <p>This repository includes, but is not limited to, the following packages:</p>
+        <ul>
+            <li><code>zapret</code></li>
+            <li><code>zapret-tpws</code></li>
+            <li><code>zapret-mdig</code></li>
+            <li><code>zapret-ip2net</code></li>
+            <li><code>luci-app-zapret</code></li>
+            <li><code>podkop</code></li>
+            <li><code>luci-app-podkop</code></li>
+        </ul>
+        <p>A complete list of available packages can be found in the respective architecture directories.</p>
+
+        <h2>Automation and Source Code</h2>
+        <p>Packages in this repository are compiled and updated automatically using GitHub Actions. The build process is configured to track new releases in the upstream source repositories and trigger a rebuild when they appear.</p>
+        <p>The workflow configuration are located in a <a href="https://github.com/AtaraxiaSjel/openwrt-repo-build" target="_blank">separate repository</a>.</p>
+
+        <h2>Disclaimer</h2>
+        <p>All packages are provided "as is", without any warranty. Use of packages from this repository is at your own risk. The author is not responsible for any device failures or security issues caused by the use of these packages.</p>
+    </div>
+
+    <footer>
+        <p>Packages are built using the <a href="https://github.com/AtaraxiaSjel/openwrt-repo-build" target="_blank">openwrt-repo-build</a> repository.</p>
+        <p>This package feed is hosted at <a href="https://github.com/AtaraxiaSjel/openwrt-repo" target="_blank">openwrt-repo</a>.</p>
+    </footer>
+
+</body>
+</html>
